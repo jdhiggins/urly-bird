@@ -12,3 +12,5 @@ python-dateutil==2.4.2
 pytz==2015.4
 matplotlib
 seaborn
+django-ipware
+
