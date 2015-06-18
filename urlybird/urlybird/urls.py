@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
+from bookmark import views as bookmark_views
+from click import views as click_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^register/$', bookmark_views.user_register, name="user_register"),
+    url(r'^logout/$', bookmark_views.user_logout, name="logout"),
+    url(r'^index/$', TemplateView.as_view(template_name='bookmark/index.html'),name = 'index')
 ]
