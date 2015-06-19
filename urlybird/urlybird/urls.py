@@ -21,15 +21,23 @@ from bookmark import views as bookmark_views
 from django.conf.urls import url
 from bookmark.views import BookmarkCreate, BookmarkUpdate, BookmarkDelete
 from click import views as click_views
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url('^', include('django.contrib.auth.urls')),
-    url(r'^register/$', bookmark_views.user_register, name="user_register"),
-    url(r'^logout/$', bookmark_views.user_logout, name="logout"),
+    url('^register/', CreateView.as_view(
+            template_name='bookmark/register.html',
+            form_class=UserCreationForm,
+            success_url='index/'), name = "user_register"
+    ),
+    url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^index/$', TemplateView.as_view(template_name='bookmark/index.html'),name = 'index'),
     url(r'bookmark/add/$', BookmarkCreate.as_view(), name='bookmark_add'),
     url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark_update'),
     url(r'bookmark/(?P<pk>[0-9]+)/delete/$', BookmarkDelete.as_view(), name='bookmark_delete'),
-
+    url(r'bookmark/detail/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-detail'),
+    url(r'bookmark/logout/$', bookmark_views.user_logout, name="logout"),
+    url(r'^bookmark/all_bookmarks$', bookmark_views.AllBookmarksListView.as_view(), name="all_bookmarks")
 ]

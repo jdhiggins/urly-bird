@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from .forms import UserCreationForm
 import operator
 from django.db.models import Avg, Count
 from django.shortcuts import render, redirect
@@ -31,7 +30,7 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
-class BookmarkCreate(LoginRequiredMixin, CreateView):
+class BookmarkCreate(CreateView):
     model = Bookmark
     fields = ['long', 'title', 'description']
 
@@ -40,50 +39,30 @@ class BookmarkCreate(LoginRequiredMixin, CreateView):
         return super(BookmarkCreate, self).form_valid(form)
 
 
-class BookmarkUpdate(LoginRequiredMixin, UpdateView):
+
+class BookmarkUpdate(UpdateView):
     model = Bookmark
     fields = ['title', 'description']
+    # template_name = 'bookmark/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(BookmarkUpdate, self).form_valid(form)
 
-class BookmarkDelete(LoginRequiredMixin,DeleteView):
+
+
+class BookmarkDelete(DeleteView):
     model = Bookmark
-    success_url = reverse_lazy('bookmark-list')
+    success_url = reverse_lazy('index')
 
-def user_register(request):
-    registered = False
 
-    if request.method == 'POST':
-        user_form = UserCreationForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-            password = user.password
-            user.set_password(password)
-            user.save()
-
-            registered = True
-
-            user = authenticate(username=user.username,
-                                password=password)
-            login(request, user)
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Welcome, {}! You are now registered at MovieBase.".format(user.username)
-            )
-            return redirect('/index/')
-
-    else:
-        user_form = UserCreationForm()
-
-    return render(request,
-                  "bookmark/register.html",
-                  {'user_creation_form': user_form})
 
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/index/')
+    return redirect('index')
+
+class AllBookmarksListView(ListView):
+    model = Bookmark
+    paginate_by = 30
+    context_object_name = 'bookmarks'

@@ -15,6 +15,12 @@ class Bookmark(models.Model):
     created = models.DateTimeField(default=timezone.now)
     edited = models.DateTimeField(default=timezone.now)
 
-    def get_absolute_url(self):
-        return reverse('bookmark-detail', kwargs={'pk': self.pk})
+    # def save(self, *args, *kwargs):
 
+
+    def get_absolute_url(self):
+        return reverse('bookmark_update', kwargs={'pk': self.pk})
+    #send it to bookmark-detail instead
+    #
+
+    ##overiding the save function in the class definition of bookmark

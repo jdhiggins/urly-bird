@@ -1,0 +1,17 @@
+{% extends "bookmark/base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+    <h1>All bookmarks</h1>
+        {% for bookmark in bookmarks %}
+                <li class="list-unstyled"><a href="{% url 'bookmark-detail' bookmark.id %}">{{ bookmark.title }}</a>
+                   <strong>{{ bookmark.long }}</strong> created at
+                    {{ bookmark.created }}</li>
+                <li class="list-comment">urlybird url: <strong>{{ bookmark.short }}</strong></li>
+        {% endfor %}
+
+        {% if is_paginated %}
+        {% bootstrap_pagination page_obj %}
+        {% endif %}
+
+{% endblock %}
