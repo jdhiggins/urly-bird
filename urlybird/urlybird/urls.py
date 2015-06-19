@@ -35,7 +35,7 @@ urlpatterns = [
     url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^index/$', TemplateView.as_view(template_name='bookmark/index.html'),name = 'index'),
     url(r'bookmark/add/$', BookmarkCreate.as_view(), name='bookmark_add'),
-    url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark_update'),
+    url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-update'),
     url(r'bookmark/(?P<pk>[0-9]+)/delete/$', BookmarkDelete.as_view(), name='bookmark_delete'),
     url(r'bookmark/detail/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-detail'),
     url(r'bookmark/logout/$', bookmark_views.user_logout, name="logout"),

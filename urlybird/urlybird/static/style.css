@@ -1433,6 +1433,9 @@ ol ol {
     list-style: none;
 }
 
+.padded-delete {
+    padding-left: 15px;
+}
 
 .list-unstyled {
   padding-left: 0;

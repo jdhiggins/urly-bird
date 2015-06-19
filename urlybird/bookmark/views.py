@@ -15,6 +15,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from django.forms import model_to_dict
+from hashids import Hashids
+
 
 # Create your views here.
 
@@ -30,20 +32,30 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
-class BookmarkCreate(CreateView):
+class BookmarkCreate(LoginRequiredMixin, CreateView):
     model = Bookmark
     fields = ['long', 'title', 'description']
 
     def form_valid(self, form):
+    #     #this is what happens when the formis valid
         form.instance.user = self.request.user
+    # #     hashids = Hashids(min_length = 4, salt="ArloBeaIdaKatie")
+    # #     previous = Bookmark.objects.latest('id')
+    # #     previousid = previous.id
+    # #     if previous.id is None:
+    # #         previousid = 0
+    # #     form.instance.short = hashids.encrypt(previousid + 1)
+    # #
+    # #     #super will save for you
         return super(BookmarkCreate, self).form_valid(form)
+        #can get rid of (BO
 
 
-
-class BookmarkUpdate(UpdateView):
+class BookmarkUpdate(LoginRequiredMixin, UpdateView):
     model = Bookmark
     fields = ['title', 'description']
     # template_name = 'bookmark/'
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -51,7 +63,7 @@ class BookmarkUpdate(UpdateView):
 
 
 
-class BookmarkDelete(DeleteView):
+class BookmarkDelete(LoginRequiredMixin, DeleteView):
     model = Bookmark
     success_url = reverse_lazy('index')
 
