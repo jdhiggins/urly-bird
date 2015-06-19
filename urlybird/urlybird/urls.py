@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from bookmark import views as bookmark_views
+from django.conf.urls import url
+from bookmark.views import BookmarkCreate, BookmarkUpdate, BookmarkDelete
 from click import views as click_views
 
 urlpatterns = [
@@ -24,5 +27,9 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     url(r'^register/$', bookmark_views.user_register, name="user_register"),
     url(r'^logout/$', bookmark_views.user_logout, name="logout"),
-    url(r'^index/$', TemplateView.as_view(template_name='bookmark/index.html'),name = 'index')
+    url(r'^index/$', TemplateView.as_view(template_name='bookmark/index.html'),name = 'index'),
+    url(r'bookmark/add/$', BookmarkCreate.as_view(), name='bookmark_add'),
+    url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark_update'),
+    url(r'bookmark/(?P<pk>[0-9]+)/delete/$', BookmarkDelete.as_view(), name='bookmark_delete'),
+
 ]

@@ -19,6 +19,39 @@ from django.forms import model_to_dict
 
 # Create your views here.
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
+from .models import Bookmark
+from django.contrib.auth.decorators import login_required
+
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view)
+
+
+class BookmarkCreate(LoginRequiredMixin, CreateView):
+    model = Bookmark
+    fields = ['long', 'title', 'description']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(BookmarkCreate, self).form_valid(form)
+
+
+class BookmarkUpdate(LoginRequiredMixin, UpdateView):
+    model = Bookmark
+    fields = ['title', 'description']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(BookmarkUpdate, self).form_valid(form)
+
+class BookmarkDelete(LoginRequiredMixin,DeleteView):
+    model = Bookmark
+    success_url = reverse_lazy('bookmark-list')
+
 def user_register(request):
     registered = False
 
