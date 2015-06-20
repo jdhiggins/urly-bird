@@ -37,7 +37,11 @@ urlpatterns = [
     url(r'bookmark/add/$', BookmarkCreate.as_view(), name='bookmark_add'),
     url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-update'),
     url(r'bookmark/(?P<pk>[0-9]+)/delete/$', BookmarkDelete.as_view(), name='bookmark_delete'),
-    url(r'bookmark/detail/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-detail'),
+    url(r'bookmark/detail/(?P<pk>[0-9]+)/$', bookmark_views.display_bookmark, name='bookmark-detail'),
     url(r'bookmark/logout/$', bookmark_views.user_logout, name="logout"),
-    url(r'^bookmark/all_bookmarks$', bookmark_views.AllBookmarksListView.as_view(), name="all_bookmarks")
+    url(r'^bookmark/all_bookmarks$', bookmark_views.AllBookmarksListView.as_view(), name='all_bookmarks'),
+    url(r'^bookmark/user_display/(?P<user_id>[0-9]+)$', bookmark_views.UserBookmarksListView.as_view(),
+        name="user_display"),
+    url(r'^b(?P<short_id>[A-Za-z]+)/', click_views.click_tracker, name='click_tracker'),
+
 ]

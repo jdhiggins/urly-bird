@@ -35,18 +35,20 @@ class LoginRequiredMixin(object):
 class BookmarkCreate(LoginRequiredMixin, CreateView):
     model = Bookmark
     fields = ['long', 'title', 'description']
+#    success_url = reverse_lazy('')
 
     def form_valid(self, form):
     #     #this is what happens when the formis valid
         form.instance.user = self.request.user
-    # #     hashids = Hashids(min_length = 4, salt="ArloBeaIdaKatie")
-    # #     previous = Bookmark.objects.latest('id')
-    # #     previousid = previous.id
-    # #     if previous.id is None:
-    # #         previousid = 0
-    # #     form.instance.short = hashids.encrypt(previousid + 1)
-    # #
+        hashids = Hashids(min_length = 4, salt="ArloBeaIdaKatie")
+        previous = Bookmark.objects.latest('id')
+        previousid = previous.id
+        if previous.id is None:
+            previousid = 0
+        form.instance.short = hashids.encrypt(previousid + 1)
+
     # #     #super will save for you
+        messages.add_message(self.request, messages.SUCCESS,"You created a bookmark!")
         return super(BookmarkCreate, self).form_valid(form)
         #can get rid of (BO
 
@@ -54,7 +56,7 @@ class BookmarkCreate(LoginRequiredMixin, CreateView):
 class BookmarkUpdate(LoginRequiredMixin, UpdateView):
     model = Bookmark
     fields = ['title', 'description']
-    # template_name = 'bookmark/'
+    template_name = 'bookmark/bookmark_update_form.html'
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
@@ -74,7 +76,34 @@ def user_logout(request):
     logout(request)
     return redirect('index')
 
+
 class AllBookmarksListView(ListView):
+    model = Bookmark
+    queryset = Bookmark.objects.order_by('-created').all()
+    paginate_by = 30
+    context_object_name = 'bookmarks'
+
+
+class UserBookmarksListView(ListView):
     model = Bookmark
     paginate_by = 30
     context_object_name = 'bookmarks'
+    template_name = 'bookmark/user_display.html'
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        queryset = Bookmark.objects.filter(user_id=user_id).order_by('-created')
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserBookmarksListView, self).get_context_data(*args, **kwargs)
+        context['user_to_display'] = User.objects.get(pk=self.kwargs['user_id'])
+        return context
+
+
+def display_bookmark(request, pk):
+    bookmark = Bookmark.objects.get(pk=pk)
+    return render(request, "bookmark/bookmark_display.html",
+                  {"bookmark": bookmark})
+
+

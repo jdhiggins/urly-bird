@@ -1,8 +1,9 @@
 {% extends "bookmark/base.html" %}
 
 {% block content %}
-    <h2>Create a bookmark</h2>
+    <h2>Update your bookmark</h2>
 
+    {% if user.id == bookmark.user.id %}
     <form method="POST" action="">
         {% csrf_token %}
         {{ form.as_p }}
@@ -10,5 +11,8 @@
         <!-- Provide a button to click to submit the form. -->
         <input type="submit" name="submit" value="Submit"/>
     </form>
+    {% else %}
+    <p>You must be the creator of the bookmark to edit.</p>
+    {% endif %}
+    <p>Back to the <a href="{% url 'all_bookmarks' %}">bookmarks.</a></p>
 {% endblock %}
-
