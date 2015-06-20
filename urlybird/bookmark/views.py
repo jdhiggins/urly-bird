@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from django.forms import model_to_dict
 from hashids import Hashids
+import datetime
+from django.utils import timezone
 
 
 # Create your views here.
@@ -23,6 +25,7 @@ from hashids import Hashids
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import Bookmark
+from click.models import Click
 from django.contrib.auth.decorators import login_required
 
 class LoginRequiredMixin(object):
@@ -57,10 +60,11 @@ class BookmarkUpdate(LoginRequiredMixin, UpdateView):
     model = Bookmark
     fields = ['title', 'description']
     template_name = 'bookmark/bookmark_update_form.html'
-    success_url = reverse_lazy('index')
+#    success_url = reverse_lazy('bookmark-detail')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        messages.add_message(self.request, messages.SUCCESS,"You updated your bookmark!")
         return super(BookmarkUpdate, self).form_valid(form)
 
 
@@ -103,7 +107,15 @@ class UserBookmarksListView(ListView):
 
 def display_bookmark(request, pk):
     bookmark = Bookmark.objects.get(pk=pk)
+
+    number_clicks = Click.objects.filter(bookmark__id=pk).count()
+
+    startdate = datetime.date.today() - datetime.timedelta(days=7)
+    week_clicks = Click.objects.filter(bookmark__id=pk, time__gte=startdate).count()
+
     return render(request, "bookmark/bookmark_display.html",
-                  {"bookmark": bookmark})
+                  {"bookmark": bookmark,
+                   "number_clicks": number_clicks,
+                   "week_clicks": week_clicks})
 
 

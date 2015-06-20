@@ -4,12 +4,30 @@
 
             <div class="centered-display-bookmark">
                 <h3>Copy this bookmark and share it!</h3>
-                <p> Shortened bookmark: localhost:8000/b/{{ bookmark.short }}</p>
+                <p> Shortened bookmark: localhost:8000/b/{{ bookmark.short }}
+                    <a href="{% url 'click_tracker' bookmark.short %}"> Go to link</a></p>
                 <p> Title: {{ bookmark.title }}</p>
                 <p> Points to: {{ bookmark.long }}</p>
                 <p> Description: {{ bookmark.description }}</p>
-                <p> Created by: <a href="{% url 'user_display' user.id %}">{{ bookmark.user }}</a> at
-                    {{ bookmark.created }}</p>
+                {%  if user.id == bookmark.user.id %}
+                    <h4>This is your bookmark!, you made it on {{ bookmark.created }}</h4>
+                    <p>This bookmark has been used
+                        {% if number_clicks == 1 %}
+                            {{ number_clicks }} time since you created it, and
+                        {% else %}
+                            {{ number_clicks }} times since you created it, and
+                        {% endif %}
+                        {% if week_clicks == 1 %}
+                            {{ week_clicks }} time in the last week.
+                        {% else %}
+                            {{ week_clicks }} times in the last week.
+                        {% endif %}</p>
+                {% else %}
+                    <p> Created by: <a href="{% url 'user_display' user.id %}">{{ bookmark.user }}</a> on
+                        {{ bookmark.created }}</p>
+                {% endif %}
+
             </div>
+
 
 {% endblock %}
