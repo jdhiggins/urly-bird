@@ -42,6 +42,6 @@ urlpatterns = [
     url(r'^bookmark/all_bookmarks$', bookmark_views.AllBookmarksListView.as_view(), name='all_bookmarks'),
     url(r'^bookmark/user_display/(?P<user_id>[0-9]+)$', bookmark_views.UserBookmarksListView.as_view(),
         name="user_display"),
-    url(r'^b(?P<short_id>[A-Za-z]+)/', click_views.click_tracker, name='click_tracker'),
+    url(r'b/(?P<short_id>[A-Za-z0-9]+)/', click_views.click_tracker, name='click_tracker'),
 
 ]
