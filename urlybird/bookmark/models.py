@@ -4,6 +4,10 @@ from django.db.models import Avg, Count
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+import random
+from faker import Faker
+from hashids import Hashids
+import pytz
 # Create your models here.
 
 class Bookmark(models.Model):
@@ -25,3 +29,28 @@ class Bookmark(models.Model):
 
 
     ##overiding the save function in the class definition of bookmark
+
+
+def create_users():
+    for i in range(100):
+        user = User.objects.create_user('User{}'.format(i),
+                                        'user{}@example.com'.format(i),
+                                        'password')
+        password = "password"
+        user.set_password(password)
+        user.save()
+
+
+def create_bookmarks():
+    fake = Faker()
+    hashids = Hashids(min_length = 4, salt="ArloBeaIdaKatie")
+    for i in range(1000):
+        bookmark = Bookmark()
+        bookmark.user = User.objects.get(username="User{}".format(random.randint(1,99)))
+        bookmark.long = fake.uri()
+        bookmark.short = hashids.encrypt(i)
+        bookmark.title = fake.bs()
+        bookmark.description = fake.catch_phrase()
+        bookmark.created = fake.date_time_this_year()
+        bookmark.edited = bookmark.created
+        bookmark.save()

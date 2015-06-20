@@ -4,8 +4,8 @@
 
             <div class="centered-display-bookmark">
                 <h3>Copy this bookmark and share it!</h3>
-                <p> Shortened bookmark: localhost:8000/b/{{ bookmark.short }}
-                    <a href="{% url 'click_tracker' bookmark.short %}"> Go to link</a></p>
+                <h2><a href="{% url 'click_tracker' bookmark.short %}">  localhost:8000/b/{{ bookmark.short }}</a></h2>
+                <p></p>
                 <p> Title: {{ bookmark.title }}</p>
                 <p> Points to: {{ bookmark.long }}</p>
                 <p> Description: {{ bookmark.description }}</p>
