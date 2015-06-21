@@ -15,4 +15,3 @@ def click_tracker(request, short_id):
     click.save()
     return redirect(bookmark.long)
 
-

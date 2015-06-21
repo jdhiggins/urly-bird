@@ -22,6 +22,7 @@
                         {% else %}
                             {{ week_clicks }} times in the last week.
                         {% endif %}</p>
+                        <img src="{% url 'bookmark_weekly_chart' bookmark.pk %}">
                 {% else %}
                     <p> Created by: <a href="{% url 'user_display' user.id %}">{{ bookmark.user }}</a> on
                         {{ bookmark.created }}</p>

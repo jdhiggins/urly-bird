@@ -18,6 +18,12 @@ from django.forms import model_to_dict
 from hashids import Hashids
 import datetime
 from django.utils import timezone
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import matplotlib
+matplotlib.style.use('ggplot')
 
 
 # Create your views here.
@@ -118,4 +124,25 @@ def display_bookmark(request, pk):
                    "number_clicks": number_clicks,
                    "week_clicks": week_clicks})
 
+def bookmark_weekly_chart(request, bookmark_id):
+    clicks = Click.objects.filter(bookmark_id=bookmark_id)
+    df = pd.DataFrame(model_to_dict(click) for click in clicks)
+    df['count'] = 1
+    df.index = df['time']
+    counts = df['count']
+    counts = counts.sort_index()
+    series = counts.resample('W', how='sum')
+    series = series.fillna(0)
+    # fill_method=0
+    response = HttpResponse(content_type='image/png')
+    fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # ax.plot(series)
+    series.plot()
+    plt.title("Total clicks by Week")
+    plt.xlabel("Week")
+    plt.ylabel("Clicks")
+    canvas = FigureCanvas(fig)
+    canvas.print_png(response)
+    return response
 
