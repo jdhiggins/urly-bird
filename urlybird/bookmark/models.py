@@ -8,7 +8,6 @@ import random
 from faker import Faker
 from hashids import Hashids
 import pytz
-from click.models import Click
 # Create your models here.
 
 class Bookmark(models.Model):
@@ -30,13 +29,13 @@ class Bookmark(models.Model):
 
     @property
     def number_clicks(self):
-        return Click.objects.filter(bookmark__id=self.pk).count()
+        return self.click_set.count()
 
     ##overiding the save function in the class definition of bookmark
 
 
-def create_users():
-    for i in range(100):
+def create_users(num_users):
+    for i in range(num_users):
         user = User.objects.create_user('User{}'.format(i),
                                         'user{}@example.com'.format(i),
                                         'password')
@@ -50,12 +49,13 @@ def create_bookmarks(num_bookmarks):
     hashids = Hashids(min_length = 4, salt="ArloBeaIdaKatie")
     for i in range(num_bookmarks):
         bookmark = Bookmark()
-        bookmark.user = User.objects.get(username="User{}".format(random.randint(1,99)))
+        users = User.objects.all()
+        bookmark.user = random.choice(users)
         bookmark.long = fake.uri()
         bookmark.short = hashids.encrypt(i)
         bookmark.title = fake.bs()
         bookmark.description = fake.catch_phrase()
-        unaware = fake.date_time_between(start_date="-2y", end_date="-1y")
+        unaware = fake.date_time_between(start_date="-4m", end_date="-2m")
         now_aware = unaware.replace(tzinfo=pytz.UTC)
         bookmark.created = now_aware
         bookmark.edited = now_aware
