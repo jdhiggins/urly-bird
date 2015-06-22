@@ -6,9 +6,9 @@
                 <h3>Copy this bookmark and share it!</h3>
                 <h2><a href="{% url 'click_tracker' bookmark.short %}">  localhost:8000/b/{{ bookmark.short }}</a></h2>
                 <p></p>
-                <p> Title: {{ bookmark.title }}</p>
-                <p> Points to: {{ bookmark.long }}</p>
-                <p> Description: {{ bookmark.description }}</p>
+                <p> <strong>Title:</strong> {{ bookmark.title }}</p>
+                <p> <strong>Points to: </strong>{{ bookmark.long }}</p>
+                <p> <strong>Description: </strong>{{ bookmark.description }}</p>
                 {%  if user.id == bookmark.user.id %}
                     <h4>This is your bookmark!  You made it on {{ bookmark.created }}</h4>
                     <p>This bookmark has been used
