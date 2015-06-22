@@ -10,7 +10,7 @@
                 <p> Points to: {{ bookmark.long }}</p>
                 <p> Description: {{ bookmark.description }}</p>
                 {%  if user.id == bookmark.user.id %}
-                    <h4>This is your bookmark!, you made it on {{ bookmark.created }}</h4>
+                    <h4>This is your bookmark!  You made it on {{ bookmark.created }}</h4>
                     <p>This bookmark has been used
                         {% if number_clicks == 1 %}
                             {{ number_clicks }} time since you created it, and
@@ -23,6 +23,7 @@
                             {{ week_clicks }} times in the last week.
                         {% endif %}</p>
                         <img src="{% url 'bookmark_weekly_chart' bookmark.pk %}">
+                        <img src="{% url 'bookmark_daily_chart' bookmark.pk %}">
                 {% else %}
                     <p> Created by: <a href="{% url 'user_display' user.id %}">{{ bookmark.user }}</a> on
                         {{ bookmark.created }}</p>

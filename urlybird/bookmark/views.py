@@ -111,6 +111,24 @@ class UserBookmarksListView(ListView):
         return context
 
 
+class UserBookmarksByCountListView(ListView):
+    model = Bookmark
+    paginate_by = 30
+    context_object_name = 'bookmarks'
+    template_name = 'bookmark/user_display_count.html'
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        queryset = Bookmark.objects.filter(user_id=user_id).annotate(num_ratings=Count
+        ('click')).order_by('-num_ratings')
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserBookmarksByCountListView, self).get_context_data(*args, **kwargs)
+        context['user_to_display'] = User.objects.get(pk=self.kwargs['user_id'])
+        return context
+
+
 def display_bookmark(request, pk):
     bookmark = Bookmark.objects.get(pk=pk)
 
@@ -138,9 +156,31 @@ def bookmark_weekly_chart(request, bookmark_id):
     fig = plt.figure()
     # ax = fig.add_subplot(111)
     # ax.plot(series)
-    series.plot()
+    series.plot(kind="bar")
     plt.title("Total clicks by Week")
     plt.xlabel("Week")
+    plt.ylabel("Clicks")
+    canvas = FigureCanvas(fig)
+    canvas.print_png(response)
+    return response
+
+def bookmark_daily_chart(request, bookmark_id):
+    clicks = Click.objects.filter(bookmark_id=bookmark_id)
+    df = pd.DataFrame(model_to_dict(click) for click in clicks)
+    df['count'] = 1
+    df.index = df['time']
+    counts = df['count']
+    counts = counts.sort_index()
+    series = counts.resample('D', how='sum')
+    series = series.fillna(0)
+    # fill_method=0
+    response = HttpResponse(content_type='image/png')
+    fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # ax.plot(series)
+    series.plot()
+    plt.title("Total clicks by Day")
+    plt.xlabel("Day")
     plt.ylabel("Clicks")
     canvas = FigureCanvas(fig)
     canvas.print_png(response)

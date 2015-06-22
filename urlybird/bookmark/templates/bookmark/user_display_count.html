@@ -10,7 +10,7 @@
             </div>
             <div class="col-sm-8">
 
-                <h3><small><a href="{% url 'user_display_count' user.id %}">Sort by count</a></small></h3>
+                <h3><small><a href="{% url 'user_display' user.id %}">Sort by date created</a></small></h3>
 
             </div>
         </div>
@@ -33,24 +33,9 @@
 
 
         {% endfor %}
-
-        {% if is_paginated %}
-        {% bootstrap_pagination page_obj %}
-        {% endif %}
     {% else %}
-    <h1>{{ user_to_display.username }} bookmarks</h1>
-        {% for bookmark in bookmarks %}
-                <li class="list-unstyled">{{ bookmark.title }}
-                   <strong>{{ bookmark.long }}</strong> created at
-                    {{ bookmark.created }} by {{ bookmark.user.username }}</li>
-                <li class="list-comment">urlybird url: <strong>{{ bookmark.short }}</strong></li>
+    <h1>This page is only for {{ user_to_display.username }}</h1>
 
-        {% endfor %}
-
-        {% if is_paginated %}
-        {% bootstrap_pagination page_obj %}
-        {% endif %}
     {% endif %}
 
 {% endblock %}
-

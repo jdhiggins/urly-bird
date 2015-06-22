@@ -44,11 +44,11 @@ def create_clicks(num_clicks):
             click.user = (random.choice(user_list)).pk
         else:
             click.user = 0
-        unaware = fake.date_time_between(start_date="-1m", end_date="-1d")
+        unaware = fake.date_time_between(start_date="-100d", end_date="-1d")
         now_aware = unaware.replace(tzinfo=pytz.UTC)
         click.time = now_aware
-        ip_list = [fake.ipv4() for i in range(100)]
-        browser_list = [fake.user_agent() for i in range(250)]
+        ip_list = [fake.ipv4() for i in range(15)]
+        browser_list = [fake.user_agent() for i in range(40)]
         click.address = (random.choice(ip_list))
         click.browser = (random.choice(browser_list))
         click.save()
