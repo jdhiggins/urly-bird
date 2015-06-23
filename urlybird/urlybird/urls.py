@@ -23,6 +23,14 @@ from bookmark.views import BookmarkCreate, BookmarkUpdate, BookmarkDelete
 from click import views as click_views
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import admin
+from django.views.generic import TemplateView
+
+from api import views as api_views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'^api/bookmarks', api_views.BookmarkViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -47,4 +55,18 @@ urlpatterns = [
     url(r'b/(?P<short_id>[A-Za-z0-9]+)/', click_views.click_tracker, name='click_tracker'),
     url(r'^bookmark/bookmark_weekly_chart/(?P<bookmark_id>\d+)$', bookmark_views.bookmark_weekly_chart, name="bookmark_weekly_chart"),
     url(r'^bookmark/bookmark_daily_chart/(?P<bookmark_id>\d+)$', bookmark_views.bookmark_daily_chart, name="bookmark_daily_chart"),
+#    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/clicks/$', api_views.ClickCreateView.as_view()),
+    url(r'^api/bookmarks/clicks/(?P<pk>\d+)$', api_views.ClickDetailView.as_view(), name="click-detail"),
+    url(r'^api/bookmarks/clickset/(?P<pk>\d+)$', api_views.ClickListView.as_view(), name="click-list"),
+
 ]
+# #should be a ClickListView
+# #def get_queryset
+#     bookmarkpk = self.kwargs['bookmarkpk']
+#     clicks = Click.objects.get(bookmark__pk = bookmarkpk)
+
+
+
