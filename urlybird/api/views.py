@@ -72,10 +72,29 @@ class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Click.objects.all()
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all()
+# class UserViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+
+class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
-    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = User.objects.all()
+
+
+
+class UserCreateView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
