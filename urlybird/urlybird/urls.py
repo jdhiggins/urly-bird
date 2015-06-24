@@ -30,7 +30,8 @@ from api import views as api_views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'^api/bookmarks', api_views.BookmarkViewSet)
+router.register(r'^api/bookmarks', api_views.BookmarkViewSet, base_name='bookmarksapi')
+#basename = ?? change it when you do a def get_queryset
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -61,6 +62,7 @@ urlpatterns = [
     url(r'^api/clicks/$', api_views.ClickCreateView.as_view()),
     url(r'^api/bookmarks/clicks/(?P<pk>\d+)$', api_views.ClickDetailView.as_view(), name="click-detail"),
     url(r'^api/bookmarks/clickset/(?P<pk>\d+)$', api_views.ClickListView.as_view(), name="click-list"),
+    url(r'^api/bookmarks/(?P<pk>\d+)$', api_views.BookmarkViewSet, name="bookmarks-api-detail"),
 
 ]
 # #should be a ClickListView

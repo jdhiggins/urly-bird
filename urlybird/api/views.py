@@ -8,18 +8,37 @@ from api.permissions import IsOwnerOrReadOnly, OwnsRelatedBookmark
 from bookmark.models import Bookmark
 from click.models import Click
 from api.serializer import BookmarkSerializer, ClickSerializer
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, generics, filters
 from rest_framework.exceptions import PermissionDenied
+import django_filters
 # Create your views here.
 
+
+class BookmarkFilter(django_filters.FilterSet):
+    long = django_filters.CharFilter(name="long", lookup_type="icontains")
+    title = django_filters.CharFilter(name="title", lookup_type="icontains")
+    description = django_filters.CharFilter(name="title", lookup_type="icontains")
+
+    class Meta:
+        model = Bookmark
+        fields = ['long', 'title', 'description']
+
+
+
 class BookmarkViewSet(viewsets.ModelViewSet):
-    queryset = Bookmark.objects.all()
+    """Search title, description or long in the style http://localhost:8000/api/bookmarks/?title=mortar"""
+    # queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly)
+    #change to IsAuthenticated, drop OrReadOnly
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = BookmarkFilter
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
 
 class ClickListView(generics.ListAPIView):
     serializer_class = ClickSerializer

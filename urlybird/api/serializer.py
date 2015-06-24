@@ -14,6 +14,9 @@ class ClickSerializer(serializers.HyperlinkedModelSerializer):
 class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     clicks = serializers.HyperlinkedIdentityField(view_name='click-list')
+    #maybe?
+    url = serializers.HyperlinkedIdentityField(view_name='bookmarks-api-detail')
     class Meta:
         model = Bookmark
-        fields = ('id', 'user', 'long', 'description', 'short', 'created', 'number_clicks', 'edited', 'clicks')
+        fields = ('id', 'user', 'long', 'description', 'title', 'url', 'short', 'created', 'number_clicks', 'edited',
+                  'clicks')
