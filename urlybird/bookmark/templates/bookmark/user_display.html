@@ -24,7 +24,7 @@
                         <li class="list-comment"><small> Clicked <strong>{{ bookmark.number_clicks }}</strong> times.</small>
                     </div>
                     <div class="col-sm-9">
-                        <a href="{% url 'bookmark-detail' bookmark.id %}">See bookmark</a>
+                        <a href="{% url 'bookmark_detail' bookmark.id %}">See bookmark</a>
                         <a class="padded-delete" href="{% url 'bookmark-update' bookmark.id %}">Edit </a>
                         <a class="padded-delete" href="{% url 'bookmark_delete' bookmark.id %}">Delete</a></li>
                     </div>
