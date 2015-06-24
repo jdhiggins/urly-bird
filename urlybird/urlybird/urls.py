@@ -32,6 +32,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 router.register(r'bookmarks', api_views.BookmarkViewSet, base_name='bookmark')
+router.register(r'users', api_views.UserViewSet)
 
 #basename = ?? change it when you do a def get_queryset
 

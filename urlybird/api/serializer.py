@@ -4,6 +4,8 @@ from bookmark.models import Bookmark
 from click.models import Click
 from hashids import Hashids
 
+from django.contrib.auth.models import User, Group
+
 
 class ClickSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -35,4 +37,10 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'user', 'long', 'description', 'title', 'url', 'short', 'created', 'number_clicks', 'edited',
                   'clicks')
 
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'email')
 

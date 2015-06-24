@@ -4,10 +4,10 @@ from bookmark.models import Bookmark
 from .serializer import BookmarkSerializer
 from rest_framework import permissions
 from api.permissions import IsOwnerOrReadOnly, OwnsRelatedBookmark
-
+from django.contrib.auth.models import User
 from bookmark.models import Bookmark
 from click.models import Click
-from api.serializer import BookmarkSerializer, ClickSerializer
+from api.serializer import BookmarkSerializer, ClickSerializer, UserSerializer
 from rest_framework import viewsets, permissions, generics, filters
 from rest_framework.exceptions import PermissionDenied
 import django_filters
@@ -70,3 +70,12 @@ class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
                           OwnsRelatedBookmark)
     serializer_class = ClickSerializer
     queryset = Click.objects.all()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
