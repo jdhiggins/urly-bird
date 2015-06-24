@@ -30,7 +30,9 @@ from api import views as api_views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'^api/bookmarks', api_views.BookmarkViewSet, base_name='bookmarks-api')
+
+router.register(r'bookmarks', api_views.BookmarkViewSet, base_name='bookmark')
+
 #basename = ?? change it when you do a def get_queryset
 
 urlpatterns = [
@@ -46,7 +48,7 @@ urlpatterns = [
     url(r'bookmark/add/$', BookmarkCreate.as_view(), name='bookmark_add'),
     url(r'bookmark/(?P<pk>[0-9]+)/$', BookmarkUpdate.as_view(), name='bookmark-update'),
     url(r'bookmark/(?P<pk>[0-9]+)/delete/$', BookmarkDelete.as_view(), name='bookmark_delete'),
-    url(r'bookmark/detail/(?P<pk>[0-9]+)/$', bookmark_views.display_bookmark, name='bookmark-detail'),
+    url(r'bookmark/detail/(?P<pk>[0-9]+)/$', bookmark_views.display_bookmark, name='bookmark_detail'),
     url(r'bookmark/logout/$', bookmark_views.user_logout, name="logout"),
     url(r'^bookmark/all_bookmarks$', bookmark_views.AllBookmarksListView.as_view(), name='all_bookmarks'),
     url(r'^bookmark/user_display/(?P<user_id>[0-9]+)$', bookmark_views.UserBookmarksListView.as_view(),
@@ -57,12 +59,13 @@ urlpatterns = [
     url(r'^bookmark/bookmark_weekly_chart/(?P<bookmark_id>\d+)$', bookmark_views.bookmark_weekly_chart, name="bookmark_weekly_chart"),
     url(r'^bookmark/bookmark_daily_chart/(?P<bookmark_id>\d+)$', bookmark_views.bookmark_daily_chart, name="bookmark_daily_chart"),
 #    url(r'^$', TemplateView.as_view(template_name="index.html")),
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/clicks/$', api_views.ClickCreateView.as_view()),
     url(r'^api/bookmarks/clicks/(?P<pk>\d+)$', api_views.ClickDetailView.as_view(), name="click-detail"),
     url(r'^api/bookmarks/clickset/(?P<pk>\d+)$', api_views.ClickListView.as_view(), name="click-list"),
-    url(r'^api/bookmarks/(?P<pk>\d+)$', api_views.BookmarkViewSet.as_view(), name="bookmarks-api-detail"),
+#    url(r'^api/bookmarks/(?P<pk>\d+)$', api_views.BookmarkViewSet, name="bookmarks-api-detail"),
+
 
 ]
 # #should be a ClickListView

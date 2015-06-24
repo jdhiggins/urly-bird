@@ -8,7 +8,7 @@
                    <strong>{{ bookmark.long }}</strong> created at
                     {{ bookmark.created }} by <a href="{% url 'user_display' bookmark.user.id %}">
                         {{ bookmark.user.username }}</a></li>
-                <li class="list-comment"><a href="{% url 'bookmark-detail' bookmark.id %}">See bookmark detail</a>
+                <li class="list-comment"><a href="{% url 'bookmark_detail' bookmark.id %}">See bookmark detail</a>
 
         {% endfor %}
 
