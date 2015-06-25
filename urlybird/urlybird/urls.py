@@ -65,6 +65,7 @@ urlpatterns = [
     url(r'^api/clicks/$', api_views.ClickCreateView.as_view()),
     url(r'^api/bookmarks/clicks/(?P<pk>\d+)$', api_views.ClickDetailView.as_view(), name="click-detail"),
     url(r'^api/bookmarks/clickset/(?P<pk>\d+)$', api_views.ClickListView.as_view(), name="click-list"),
+        #could be ClickListCreateView
 #    url(r'^api/bookmarks/(?P<pk>\d+)$', api_views.BookmarkViewSet, name="bookmarks-api-detail"),
     url(r'^api/userset/$', api_views.UserListView.as_view(), name="user-list"),
     url(r'^api/users/(?P<pk>\d+)$', api_views.UserDetailView.as_view(), name="user-detail"),
