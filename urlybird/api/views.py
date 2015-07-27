@@ -82,7 +82,7 @@ class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
 
 

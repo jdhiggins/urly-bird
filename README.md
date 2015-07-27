@@ -1,3 +1,18 @@
+Welcome to URLy Bird -- by Josh Higgins
+
+This project was to build a bit.ly like site that created shortened URLs
+for users.  The traffic for each URL could be tracked and visualized onsite
+with charts for daily usage.
+
+This was a great project for understanding Django and how information is
+shared between models, views, templates and URLs.  We used mostly function
+based views on this project, and I got a really good understanding of the
+workings of Django because we built our knowledge from the bottom up.
+
+I refer to this urlybird project quite often when I am trying to remember
+how to do something in Django.
+
+
 # URLy Bird
 
 ## Description
